@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>XYscope</title>
+	<link rel="stylesheet" href="includes/css/styles.css">
+	<link rel="stylesheet" href="includes/js/highlight/docco.css">
+	<script src="includes/js/highlight/highlight.pack.js"></script>
+	<style type="text/css">
+		/*#glitchbg{
+			position:fixed;
+			top:0;
+			left:0;
+			width:100vw;
+			height:100vh;
+			z-index:-1;
+			background-size:100% 100%;
+			image-rendering:pixelated;
+		}*/
+		#spacer{
+			position: relative;
+			height: 100vh;
+		}
+		canvas{
+			position:fixed;
+			top:0;
+			left:0;
+			z-index:-1;
+			width:100vw;
+			height:100vh;
+			margin:0;
+		}
+		code{
+			background:#fafafa;
+			border:1px solid #ddd;
+			border-radius:3px;
+			padding:3px;
+		}
+		li{
+			/*list-style-type: square;*/
+		}
+		td{
+			border-bottom:1px solid #999;
+			border-right:1px solid #ddd;
+			font-size:10pt;
+		}
+
+		tr:hover{
+			background:rgba(250, 250, 0, .25);
+			cursor:help;
+		}
+		tr img{
+			mix-blend-mode: multiply;
+/*			height:100px;*/
+		}
+	</style>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
+</head>
+<body>
+	<script src="includes/js/stmd.js"></script>
+	<script src="includes/js/render.js"></script>
+
+	<div id="md">
+		GEN-AR<br><br>
+		offline » requires localhost webserver<br>
+		online  » <a href="https://gen-ar.github.io">https://gen-ar.github.io</a>
+	</div>
+
+	<div id="spacer"></div>
+
+	<script type="text/javascript">
+
+		window.addEventListener('scroll', (e)=>{
+			let spacer = document.getElementById('spacer')
+			if(window.scrollY > spacer.offsetTop - 1){
+				strokeAlpha = 255
+			}else{
+				strokeAlpha = 25
+			}
+		})
+
+		function windowResized() {
+			resizeCanvas(windowWidth, windowHeight);
+		}
+
+
+		// 6Beine - initial sketch v3
+		// cc teddavis.org 2022
+		
+		/*
+		inspiration:
+		https://p5js.org/examples/
+		legs: https://p5js.org/examples/transform-arm.html
+		collide: https://p5js.org/examples/motion-circle-collision.html
+		target seek: https://p5js.org/examples/motion-moving-on-curves.html
+
+		body move: https://p5js.org/examples/interaction-follow-2.html
+
+		antennas: https://p5js.org/examples/interaction-reach-2.html
+		*/
+
+		let l, l2
+		let bug, leg
+		let bugs = []
+		let legs = []
+		let ant, ants = [], antsCount = 5
+		var strokeAlpha = 25
+
+		function setup() {
+			createCanvas(windowWidth, windowHeight)
+			
+			ant = new Ant(random(width), random(height), 10)
+			for(let i=0; i<antsCount;i++){
+				ants.push(new Ant(random(width), random(height), floor(random(5, 10))))
+			}
+			angleMode(DEGREES)
+		}
+
+		function draw() {
+			background(255, 255, 225)
+
+			ant.display()
+			for(let a of ants){
+				a.display()
+			}
+		}
+
+		function mousePressed() {
+			ants.push(new Ant(mouseX, mouseY, floor(random(5, 10))))
+		}
+
+		class Ant {
+			constructor(x, y, s, opts) {
+				this.c = createVector(0, 0)
+				this.pc = createVector(0, 0)
+
+				this.s = s
+				this.w = s
+				this.h = s
+				this.speed = 15
+				this.col = 0
+				this.legs = []
+				this.frameCount = floor(random(9999))
+
+				this.pos = createVector(x, y);
+				this.vel = createVector(0, 0);
+				this.mass = 4;
+				this.r = sqrt(this.mass) * 10;
+				this.angle = 0;
+
+				let row = 0
+				for(let i = 0; i < 6; i += 1) {
+					let x = i % 2 == 0 ? this.s / 2 : -this.s / 2
+					let y = map(row, 0, 2, -this.s, this.s)
+					let taper = map(i, 0, 5, 0, this.s / 3)
+					this.legs.push(new Leg(x, y, {
+						dir: i % 2 == 0 ? 1 : -1,
+						speed: this.speed,
+						phase: row % 2 * 90 + random(55),
+						segLength: this.s,
+						angle1Max: 15,
+						angle1Offset: 0,
+						angle2Max: 2,
+						angle2Offset: 30,
+						sw1: this.s / 4,
+						sw2: this.s / 6,
+					}))
+
+					if(i % 2 != 0) {
+						row++
+					}
+				}
+
+			}
+
+
+			wrapEdges() {
+				let buffer = this.s * 2;
+				if(this.pos.x > width + buffer) this.pos.x = -buffer;
+				else if(this.pos.x < -buffer) this.pos.x = width + buffer;
+				if(this.pos.y > height + buffer) this.pos.y = -buffer;
+				else if(this.pos.y < -buffer) this.pos.y = height + buffer;
+			}
+
+			display() {
+				this.wrapEdges()
+
+				// this.angle += 0.1;
+				this.angle = noise(this.frameCount*.005)*10
+				if(dist(mouseX, mouseY, this.pos.x, this.pos.y) > 155){
+				}else{
+					// this.angle -= .1
+				// this.angle = sin(this.frameCount * 1.5) * 4
+				}
+
+				this.vel = p5.Vector.fromAngle(this.angle);
+				this.vel.mult(noise(this.frameCount*.01)*(11-this.s)*.8);
+
+				this.pos.add(this.vel.mult(1));
+				// print(this.vel)
+
+				push()
+				fill(this.col, strokeAlpha)
+				stroke(this.col, strokeAlpha)
+				translate(this.pos.x, this.pos.y)
+				this.angle = this.vel.heading();
+				rotate(degrees(this.angle) + 90);
+				ellipse(0, -this.s * 1.5, this.s * 1, this.s)
+				ellipse(0, 0, this.s * 1, this.s * 2)
+				ellipse(0, this.s * 2.5, this.s * 2, this.s * 3)
+				for(let l of this.legs) {
+					// l.x = this.x
+					l.speed = (12-this.s)*5//+degrees(this.vel.x)/20//10-this.vel.heading()
+					l.display()
+				}
+				pop()
+				this.frameCount++
+			}
+		}
+
+		class Leg {
+			constructor(x, y, opts = {}) {
+				this.dir = 1
+				this.x = x
+				this.y = y
+
+				this.segLength = 100;
+				this.angle1Max = 10
+				this.angle2Max = 70
+				this.sw1 = this.segLength / 12
+				this.sw2 = this.segLength / 18
+				this.speed = 3
+				this.phase = 0
+
+				this.angle1Offset = 0
+				this.angle2Offset = 0
+
+				for(var prop in opts) {
+					if(opts.hasOwnProperty(prop)) {
+						this[prop] = opts[prop];
+					}
+				}
+
+				this.frameCount = 0
+				this.angle1 = 0.0;
+				this.angle2 = 0.0;
+			}
+
+			display() {
+				//Change the angle of the segments according to the mouse positions
+				this.angle1 = this.angle1Offset + sin(this.phase + this.frameCount * this.speed) * this.angle1Max // (mouseX / float(width) - 0.5) * -TWO_PI;
+				this.angle2 = this.angle2Offset + cos(this.phase + this.frameCount * this.speed) * this.angle2Max //(mouseY / float(height) - 0.5) * PI;
+
+				//use push and pop to "contain" the transforms. Note that
+				// even though we draw the segments using a custom function,
+				// the transforms still accumulate
+				push();
+				strokeWeight(this.sw1)
+				this.segment(this.x, this.y, this.angle1 * this.dir);
+				strokeWeight(this.sw2)
+				this.segment(this.segLength * this.dir, 0, this.angle2 * this.dir);
+				pop();
+				this.frameCount++
+			}
+
+			segment(x, y, a) {
+				translate(x, y);
+				rotate(a);
+				line(0, 0, this.segLength * this.dir, 0);
+			}
+		}
+	</script>
+</body>
+</html>
