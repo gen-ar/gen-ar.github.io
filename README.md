@@ -110,10 +110,10 @@ createCanvas(895, 1280, document.getElementById('canvas-ar'))
 pixelDensity(1)
 
 ```
-*That's it..!* ... ahem, technically. You'll still need to run the folder as a local webserver for testing. For that I recommend using [MAMP](https://www.mamp.info/en/downloads/) (basic, not pro), or if you have Python/PHP installed, using CLI to [run the folder as a webserver](https://dev.to/alexmercedcoder/guide-to-starting-a-quick-http-dev-server-from-the-command-line-python-node-ruby-php-3o87). For advanced usage and testing with your smartphone, check out [ngrok](https://ngrok.com/).
+*That's it..!* ... ahem, technically. You'll still need to run the folder as a local webserver for testing. For that I recommend using [Visual Studio Code](https://code.visualstudio.com/download) + the [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) extension. (Or with [MAMP](https://www.mamp.info/en/downloads/), or if you have Python/PHP installed, using CLI to [run the folder as a webserver](https://dev.to/alexmercedcoder/guide-to-starting-a-quick-http-dev-server-from-the-command-line-python-node-ruby-php-3o87)). For advanced usage and testing with your smartphone, check out [ngrok](https://ngrok.com/).
 
 ## Examples
-[Here are examples](https://github.com/gen-ar/gen-ar-examples) to get you up and running! For now they are focused on an F4/Weltformat sized poster, but simply adjust the `a-plane width="1" height="1.4145"` ratio to match your tracked image.
+[Download the examples](https://github.com/gen-ar/gen-ar-examples/releases/download/0.1.0/gen-ar-examples.zip) to get up and running! For now they are focused on an F4/Weltformat sized poster, but simply adjust the `a-plane width="1" height="1.4145"` ratio to match your tracked image.
 
 <table>
     <tr style="font-weight:bold;">
@@ -147,6 +147,8 @@ pixelDensity(1)
 All demos reference the original poster artwork for how this research began. You can print it out, save it to your mobile, or use the QR codes above to send your mobile device to the demo and point the camera at this image:
 
 <img src="includes/images/zfua_die-zukunft-hat-6-beine.jpg" width="400px">
+
+*See bottom of [workflow](#workflow) above for running an example as a local webserver, since it doesn't work to just drag + drop in browser.*
 
 ## Hosting
 This workflow uses only static HTML pages, so it can be uploaded to just about any webhosting service. One free option is to host it using GitHub's own Pages feature:
