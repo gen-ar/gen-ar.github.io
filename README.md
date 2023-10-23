@@ -12,6 +12,7 @@ This is an overview for creating generative [Augmented Reality](https://en.wikip
 - [Background](#background)
 - [Workflow](#workflow)
 - [Examples](#examples)
+- [Server](#server)
 - [Hosting](#hosting)
 - [Projects](#projects)
 - [Extras](#extras)
@@ -110,7 +111,7 @@ createCanvas(895, 1280, document.getElementById('canvas-ar'))
 pixelDensity(1)
 
 ```
-*That's it..!* ... ahem, technically. You'll still need to run the folder as a local webserver for testing. For that I recommend using [Visual Studio Code](https://code.visualstudio.com/download) + the [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) extension. (Or with [MAMP](https://www.mamp.info/en/downloads/), or if you have Python/PHP installed, using CLI to [run the folder as a webserver](https://dev.to/alexmercedcoder/guide-to-starting-a-quick-http-dev-server-from-the-command-line-python-node-ruby-php-3o87)). For advanced usage and testing with your smartphone, check out [ngrok](https://ngrok.com/).
+*That's it..!* ... ahem, technically. *See [server](#server) below for testing via a `localhost` webserver.*
 
 ## Examples
 [Download the examples](https://github.com/gen-ar/gen-ar-examples/releases/download/0.1.0/gen-ar-examples.zip) to get up and running! For now they are focused on an F4/Weltformat sized poster, but simply adjust the `a-plane width="1" height="1.4145"` ratio to match your tracked image.
@@ -141,6 +142,12 @@ pixelDensity(1)
         <td>Offset AR layers in Z-Axis towards camera</td>
         <td><a href="https://gen-ar.github.io/gen-ar-examples/p5js-poster-layer-multi-z/"><img src="includes/images/p5js-poster-layer-multi-z-qr.png" alt="" height="100"></a></td>
     </tr>
+	<tr style="font-style:italic;">
+        <td>p5js-multi-target</td>
+        <td>Coming soon...</td>
+        <td></td>
+    </tr>
+
 </table>
 
 
@@ -148,7 +155,24 @@ All demos reference the original poster artwork for how this research began. You
 
 <img src="includes/images/zfua_die-zukunft-hat-6-beine.jpg" width="400px">
 
-*See bottom of [workflow](#workflow) above for running an example as a local webserver, since it doesn't work to just drag + drop in browser.*
+*See [server](#server) section below for running examples as a `localhost` webserver.*
+
+## Server
+In order to test out the workflow or examples, you'll need to run them as a `localhost` webserver, which enables you to use the webcam and load js files *(drag + drop into browser doesn't allow this)*.
+
+For simplicity I recommend using [Visual Studio Code](https://code.visualstudio.com/download) + the [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) extension. This lets you tell the directory (or the entire examples folder) to be accessible via [localhost:5500](http://localhost:5500/) *(default port)*.
+
+- Open VisualStudio Code
+- Open folder of project or examples
+- Click `Go Live` in lower right corner
+- Visit [localhost:5500](http://localhost:5500/)
+- Browse an example
+- Changes made to code insta-refresh, no need to toggle server
+- Stop server when finished
+
+Alternatively use with [MAMP](https://www.mamp.info/en/downloads/), or if you have Python/PHP installed, using CLI to [run the folder as a webserver](https://dev.to/alexmercedcoder/guide-to-starting-a-quick-http-dev-server-from-the-command-line-python-node-ruby-php-3o87)). 
+
+For testing with your smartphone, check out [ngrok](https://ngrok.com/), which lets you share a `localhost` port remotely on the internet.
 
 ## Hosting
 This workflow uses only static HTML pages, so it can be uploaded to just about any webhosting service. One free option is to host it using GitHub's own Pages feature:
@@ -161,6 +185,7 @@ This workflow uses only static HTML pages, so it can be uploaded to just about a
 - Visit `https://username.github.io/reponame`
 - [Create QR code](https://www.qrcode-monkey.com/) for easy referral on smartphone
 
+Alternatively, [glitch.com](https://glitch.com) can be a great free place to host your projects. For simplest workflow, upload to GitHub, within glitch.com create a `glitch-hello-website` (static html) project, then use their `Tools` » `Import/Export` » `Import from GitHub`.
 
 ## Projects
 A collection of works that utilize this workflow can be found here:  
